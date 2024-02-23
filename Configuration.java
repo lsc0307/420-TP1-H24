@@ -3,12 +3,13 @@ public class Configuration {
     private double prix_max;
     private Composant[] composants;
     private int nb_composants;
-    private final int MAX_COMPOSANTS = 20;
+    public static final int MAX_COMPOSANTS = 20;
 
     public Configuration(String description,double prix_max,Composant[] composants){
         this.description = description;
         this.prix_max = prix_max;
-        this.composants = composants;
+        this.composants = new Composant[MAX_COMPOSANTS];
+
     }
 
     public Configuration(Configuration config){
@@ -22,7 +23,7 @@ public class Configuration {
 
     public double calculerTotal(double taxe){
         double prixTotal=0;
-        for(int i=0;i< composants.length;i++){
+        for(int i=0;i< nb_composants;i++){
             prixTotal += composants[i].getPrix();
         }
         return prixTotal;
@@ -50,6 +51,34 @@ public class Configuration {
         return false;
     }
 
+    public boolean ajouter(Composant composant){
+        int prixCompos = 0;
+        int i = 0;
+        for (; i <= getNbComposants() ; i++) {
+            prixCompos += composants[i].getPrix();
+        }
+        if(rechercher(composant.getCategorie()) != null || nb_composants == MAX_COMPOSANTS || prixCompos + composant.getPrix() > prix_max){
+            return false;
+        }
+        else{
+            composants[i] = composant;
+            return true;
+        }
+    }
+
+    public boolean retirer(Composant composant){
+            for (int i = 0; i <= getNbComposants(); i++) {
+                if(composants[i].equals(composant)){
+                    for(int j=i;j < getNbComposants();j++){
+                        composants[j] = composants[j+1];
+                    }
+
+                    nb_composants--;
+                    return true;
+                }
+            }
+           return false;
+    }
 
 
 
@@ -67,7 +96,7 @@ public class Configuration {
         return composants;
     }
 
-    public int getNb_composants() {
+    public int getNbComposants() {
         return nb_composants;
     }
 
