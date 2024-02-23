@@ -1,5 +1,7 @@
+import java.util.Locale;
+
 public class Configuration {
-    private static String description;
+    private String description;
     private double prix_max;
     private Composant[] composants;
     private int nb_composants;
@@ -8,8 +10,8 @@ public class Configuration {
     public Configuration(String description,double prix_max,Composant[] composants){
         this.description = description;
         this.prix_max = prix_max;
-        this.composants = new Composant[MAX_COMPOSANTS];
-
+        this.composants = composants;
+        this.nb_composants = composants.length;
     }
 
     public Configuration(Configuration config){
@@ -19,6 +21,7 @@ public class Configuration {
         for (int i = 0; i < config.composants.length; i++) {
             this.composants[i] = config.composants[i];
         }
+        this.nb_composants = config.nb_composants;
     }
 
     public double calculerTotal(double taxe){
@@ -31,7 +34,7 @@ public class Configuration {
 
     public Composant rechercher(String categorie){
         for(int i=0;i< composants.length;i++){
-            if(composants[i].getCategorie().equals(categorie)){
+            if(composants[i].getCategorie().equalsIgnoreCase(categorie)){
                 return composants[i];
             }
         }
@@ -80,11 +83,21 @@ public class Configuration {
            return false;
     }
 
+    public String toString(){
+        String affichage = "description(" + getPrix_max() + ") :";
+        int numeroComposante = 1;
+        for(int i=0;i < getNbComposants();i++){
+            affichage = affichage + "\n \t" + numeroComposante + " : " + composants[i].getNom() + " (" + composants[i].getPrix() + ")";
+            numeroComposante++;
+        }
+        return affichage;
+    }
+
 
 
     //Accesseurs et Mutateurs
 
-    public static String getDescription() {
+    public String getDescription() {
         return description;
     }
 
