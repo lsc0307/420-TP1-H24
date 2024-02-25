@@ -6,12 +6,17 @@ public class Configuration {
     private Composant[] composants;
     private int nb_composants;
     public static final int MAX_COMPOSANTS = 20;
+    private double taxes = 0.15;
 
     public Configuration(String description,double prix_max,Composant[] composants){
         this.description = description;
         this.prix_max = prix_max;
-        this.composants = composants;
+        this.composants = new Composant[MAX_COMPOSANTS];
         this.nb_composants = composants.length;
+
+        for (int i = 0; i < this.nb_composants; i++) {
+            this.composants[i] = composants[i];
+        }
     }
 
     public Configuration(Configuration config){
@@ -29,12 +34,21 @@ public class Configuration {
         for(int i=0;i< nb_composants;i++){
             prixTotal += composants[i].getPrix();
         }
+        prixTotal = prixTotal + (prixTotal * taxe);
+        return prixTotal;
+    }
+
+    public double calculerTotalSansTaxe(Composant[] composants){
+        double prixTotal=0;
+        for(int i=0;i< nb_composants;i++){
+            prixTotal += composants[i].getPrix();
+        }
         return prixTotal;
     }
 
     public Composant rechercher(String categorie){
-        for(int i=0;i< composants.length;i++){
-            if(composants[i].getCategorie().equalsIgnoreCase(categorie)){
+        for(int i=0;i< getNbComposants();i++){
+            if(composants[i] != null && composants[i].getCategorie().equalsIgnoreCase(categorie) ){
                 return composants[i];
             }
         }
@@ -42,11 +56,9 @@ public class Configuration {
     }
 
     public boolean remplacer(Composant composant){
-        if(rechercher(composant.getCategorie()) == null){
-            return false;
-        }
+
         for(int i=0;i<composants.length;i++){
-            if(composants[i].getCategorie().equals(composant.getCategorie()) && (prix_max-composants[i].getPrix()) + composant.getPrix() <= prix_max){
+            if(composants[i] != null && composants[i].getCategorie().equals(composant.getCategorie()) && (calculerTotalSansTaxe(composants) -composants[i].getPrix() + composant.getPrix()) <= prix_max){
                 composants[i] = composant;
                 return true;
             }
@@ -55,23 +67,25 @@ public class Configuration {
     }
 
     public boolean ajouter(Composant composant){
-        int prixCompos = 0;
-        int i = 0;
-        for (; i <= getNbComposants() ; i++) {
-            prixCompos += composants[i].getPrix();
+
+        if(rechercher(composant.getCategorie()) != null || nb_composants == MAX_COMPOSANTS){
+            System.out.println("Il y a déjà un composant de cette catégorie: " + composant.toString());
+            return false;
         }
-        if(rechercher(composant.getCategorie()) != null || nb_composants == MAX_COMPOSANTS || prixCompos + composant.getPrix() > prix_max){
+        else if(rechercher(composant.getCategorie()) != null || calculerTotalSansTaxe(composants) + composant.getPrix() > prix_max){
+            System.out.println("L'ajout de ce composant ferait dépasser le prix maximum: " + composant.toString());
             return false;
         }
         else{
-            composants[i] = composant;
+            composants[getNbComposants()] = composant;
+            nb_composants++;
             return true;
         }
     }
 
     public boolean retirer(Composant composant){
             for (int i = 0; i <= getNbComposants(); i++) {
-                if(composants[i].equals(composant)){
+                if(composants[i] != null && composants[i].equals(composant)){
                     for(int j=i;j < getNbComposants();j++){
                         composants[j] = composants[j+1];
                     }
@@ -80,6 +94,7 @@ public class Configuration {
                     return true;
                 }
             }
+            System.out.println("Composant introuvable: " + composant.toString());
            return false;
     }
 

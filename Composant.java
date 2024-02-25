@@ -9,7 +9,7 @@ public class Composant {
 
     public Composant(String categorie,String marque, String nom, double prix){
         rabais = 0;
-        this.categorie = categorie.toUpperCase();
+        this.categorie = categorie.toUpperCase().trim();
         this.marque = marque;
         this.nom = nom;
         this.prix = prix;
@@ -31,7 +31,7 @@ public class Composant {
 
 //Accesseurs et mutateurs
     public double getPrix() {
-        return prix - (prix * (getRabais() / 100));
+        return prix - (prix * (getRabais()));
     }
 
     public String getCategorie() {
