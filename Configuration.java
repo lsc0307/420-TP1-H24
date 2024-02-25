@@ -20,11 +20,12 @@ public class Configuration {
     }
 
     public Configuration(Configuration config){
-        this.description = config.description;
+        this.description = config.description + " (copie) ";
         this.prix_max = config.prix_max;
-        this.composants = new Composant[config.composants.length];
-        for (int i = 0; i < config.composants.length; i++) {
-            this.composants[i] = config.composants[i];
+        this.composants = new Composant[MAX_COMPOSANTS];
+        for (int i = 0; i < config.getNbComposants(); i++) {
+            if(config.composants[i] != null)
+                this.composants[i] = config.composants[i].copier();
         }
         this.nb_composants = config.nb_composants;
     }
@@ -32,7 +33,10 @@ public class Configuration {
     public double calculerTotal(double taxe){
         double prixTotal=0;
         for(int i=0;i< nb_composants;i++){
-            prixTotal += composants[i].getPrix();
+            if(composants[i] != null){
+                prixTotal += composants[i].getPrix();
+            }
+
         }
         prixTotal = prixTotal + (prixTotal * taxe);
         return prixTotal;
@@ -59,7 +63,10 @@ public class Configuration {
 
         for(int i=0;i<composants.length;i++){
             if(composants[i] != null && composants[i].getCategorie().equals(composant.getCategorie()) && (calculerTotalSansTaxe(composants) -composants[i].getPrix() + composant.getPrix()) <= prix_max){
+                System.out.println(composants[i].toString() + " retiré de la configuration ");
                 composants[i] = composant;
+                System.out.println(composant.toString() + " ajouté à la configuration ");
+
                 return true;
             }
         }
@@ -79,6 +86,7 @@ public class Configuration {
         else{
             composants[getNbComposants()] = composant;
             nb_composants++;
+            System.out.println(composant.toString() + " ajouté à la configuration " + "(total=" + calculerTotalSansTaxe(composants)+ ")");
             return true;
         }
     }
@@ -91,6 +99,7 @@ public class Configuration {
                     }
 
                     nb_composants--;
+                    System.out.println(composant.toString() + " retiré de la configuration " + "(total=" + calculerTotalSansTaxe(composants)+ ")");
                     return true;
                 }
             }
@@ -99,11 +108,14 @@ public class Configuration {
     }
 
     public String toString(){
-        String affichage = "description(" + getPrix_max() + ") :";
+        String affichage =  getDescription() + "(max" + getPrix_max() + ") :";
         int numeroComposante = 1;
-        for(int i=0;i < getNbComposants();i++){
-            affichage = affichage + "\n \t" + numeroComposante + " : " + composants[i].getNom() + " (" + composants[i].getPrix() + ")";
-            numeroComposante++;
+        for(int i=0;i < this.getNbComposants();i++){
+            if(this.composants[i] != null){
+                affichage = affichage + "\n \t" + numeroComposante + " : [" + composants[i].getCategorie() + "]" + " " + composants[i].getMarque() + " " +  composants[i].getNom() + " (" + composants[i].getPrix() + ")";
+                numeroComposante++;
+            }
+
         }
         return affichage;
     }
