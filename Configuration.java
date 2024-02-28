@@ -14,7 +14,7 @@ public class Configuration {
         this.composants = new Composant[MAX_COMPOSANTS];
         this.nb_composants = composants.length;
 
-        for (int i = 0; i < this.nb_composants; i++) {
+        for (int i = 0; i < this.getNbComposants(); i++) {
             this.composants[i] = composants[i];
         }
     }
@@ -32,7 +32,7 @@ public class Configuration {
 
     public double calculerTotal(double taxe){
         double prixTotal=0;
-        for(int i=0;i< nb_composants;i++){
+        for(int i=0;i< getNbComposants();i++){
             if(composants[i] != null){
                 prixTotal += composants[i].getPrix();
             }
@@ -44,7 +44,7 @@ public class Configuration {
 
     public double calculerTotalSansTaxe(Composant[] composants){
         double prixTotal=0;
-        for(int i=0;i< nb_composants;i++){
+        for(int i=0;i< getNbComposants();i++){
             prixTotal += composants[i].getPrix();
         }
         return prixTotal;
@@ -61,8 +61,8 @@ public class Configuration {
 
     public boolean remplacer(Composant composant){
 
-        for(int i=0;i<composants.length;i++){
-            if(composants[i] != null && composants[i].getCategorie().equals(composant.getCategorie()) && (calculerTotalSansTaxe(composants) -composants[i].getPrix() + composant.getPrix()) <= prix_max){
+        for(int i=0;i<getNbComposants();i++){
+            if(composants[i] != null && composants[i].getCategorie().equalsIgnoreCase(composant.getCategorie()) && (calculerTotalSansTaxe(composants) -composants[i].getPrix() + composant.getPrix()) <= prix_max){
                 System.out.println(composants[i].toString() + " retiré de la configuration ");
                 composants[i] = composant;
                 System.out.println(composant.toString() + " ajouté à la configuration ");
@@ -75,8 +75,12 @@ public class Configuration {
 
     public boolean ajouter(Composant composant){
 
-        if(rechercher(composant.getCategorie()) != null || nb_composants == MAX_COMPOSANTS){
+        if(rechercher(composant.getCategorie()) != null){
             System.out.println("Il y a déjà un composant de cette catégorie: " + composant.toString());
+            return false;
+        }
+        else if( nb_composants == MAX_COMPOSANTS){
+            System.out.println("Le nombre de composants maximum a deja été atteint");
             return false;
         }
         else if(rechercher(composant.getCategorie()) != null || calculerTotalSansTaxe(composants) + composant.getPrix() > prix_max){
@@ -99,7 +103,8 @@ public class Configuration {
                     }
 
                     nb_composants--;
-                    System.out.println(composant.toString() + " retiré de la configuration " + "(total=" + calculerTotalSansTaxe(composants)+ ")");
+                    System.out.println(composant.toString() + " retiré de la configuration " + "(total=" + String.format("%.2f", calculerTotalSansTaxe(composants)) + "$)");
+
                     return true;
                 }
             }
@@ -108,11 +113,17 @@ public class Configuration {
     }
 
     public String toString(){
-        String affichage =  getDescription() + "(max" + getPrix_max() + ") :";
+        String affichage = getDescription() + "(max " + String.format("%.2f", getPrix_max()) + "$) :";
+
         int numeroComposante = 1;
         for(int i=0;i < this.getNbComposants();i++){
             if(this.composants[i] != null){
-                affichage = affichage + "\n \t" + numeroComposante + " : [" + composants[i].getCategorie() + "]" + " " + composants[i].getMarque() + " " +  composants[i].getNom() + " (" + composants[i].getPrix() + ")";
+                affichage += String.format("\n \t%d : [%s] %s %s (%.2f$)",
+                        numeroComposante,
+                        composants[i].getCategorie(),
+                        composants[i].getMarque(),
+                        composants[i].getNom(),
+                        composants[i].getPrix());
                 numeroComposante++;
             }
 

@@ -49,19 +49,7 @@ public class Composant {
     public double getRabais() {
         return rabais;
     }
-/*
-    public void setCategorie(String categorie) {
-        this.categorie = categorie.toUpperCase();
-    }
 
-    public void setMarque(String marque) {
-        this.marque = marque;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-*/
     public void setPrix(double prix) {
         if(prix > 0){
             this.prix = prix;
