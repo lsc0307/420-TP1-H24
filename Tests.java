@@ -1,4 +1,6 @@
 import org.testng.annotations.Test;
+import src.Composant;
+import src.Configuration;
 
 import static org.testng.Assert.*;
 
@@ -8,7 +10,7 @@ public class Tests {
         @Test
         public void testAjouterAvecSucces() {
             Composant cpu = new Composant("CPU", "Intel", "Core i7", 300);
-            Configuration config = new Configuration("Configuration de test", 1000, new Composant[]{});
+            Configuration config = new Configuration("src.Configuration de test", 1000, new Composant[]{});
             assertTrue(config.ajouter(cpu));
             assertEquals(1, config.getNbComposants());
         }
@@ -17,7 +19,7 @@ public class Tests {
         public void testAjouterMemeCategorie() {
             Composant cpu1 = new Composant("CPU", "Intel", "Core i7", 300);
             Composant cpu2 = new Composant("CPU", "AMD", "Ryzen 5", 200);
-            Configuration config = new Configuration("Configuration de test", 1000, new Composant[]{cpu1});
+            Configuration config = new Configuration("src.Configuration de test", 1000, new Composant[]{cpu1});
             assertFalse(config.ajouter(cpu2));
             assertEquals(1, config.getNbComposants());
         }
@@ -25,14 +27,14 @@ public class Tests {
         @Test
         public void testAjouterDepassePrixMaximal() {
             Composant gpu = new Composant("GPU", "Nvidia", "RTX 3080", 900);
-            Configuration config = new Configuration("Configuration de test", 800, new Composant[]{});
+            Configuration config = new Configuration("src.Configuration de test", 800, new Composant[]{});
             assertFalse(config.ajouter(gpu));
             assertEquals(0, config.getNbComposants());
         }
 
     @Test
     public void testAjouterDepasseNbMaxComposants() {
-        Configuration config = new Configuration("Configuration de test", 10000, new Composant[]{});
+        Configuration config = new Configuration("src.Configuration de test", 10000, new Composant[]{});
         Composant c1 = new Composant("C1", "Intel", "Core i7", 300);
         Composant c2 = new Composant("C2", "AMD", "Ryzen 5", 200);
         Composant c3 = new Composant("C3", "Intel", "Core i7", 300);
@@ -74,7 +76,7 @@ public class Tests {
         config.ajouter(c19);
         config.ajouter(c20);
 
-        assertFalse(config.ajouter(new Composant("Composant", "Marque", "Nom", 100)));
+        assertFalse(config.ajouter(new Composant("src.Composant", "Marque", "Nom", 100)));
         assertEquals(Configuration.MAX_COMPOSANTS, config.getNbComposants());
     }
     }

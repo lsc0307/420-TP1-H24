@@ -1,5 +1,7 @@
+package src;
+
 /* INSCRIVEZ VOTRE (OU VOS) PRÉNOM ET NOM CI-DESSOUS
-   1:
+   1:Leandro Schoonewolff
    2:
    Adresse URL de votre dépôt GitHub:
 NE MODIFIEZ PAS LE RESTE DE CE FICHIER
@@ -81,9 +83,9 @@ public class Main {
                                         //  2: [SSD] Western Digital SN850X 1TB (100,00$)
         afficherTotal(config2); // Total: 2 composants pour 287,50$ (taxes incluses)
         // Retraits refusés
-        config1.retirer(tridentzDDR4); // Composant introuvable: [RAM] GSkill Trident-Z DDR4 32GB
-        config1.retirer(gbRTX4060); // Composant introuvable: [GPU] Gigabyte RTX 4060
-        config2.retirer(ryzen5700x); // Composant introuvable: [CPU] AMD Ryzen 5 5700X
+        config1.retirer(tridentzDDR4); // src.Composant introuvable: [RAM] GSkill Trident-Z DDR4 32GB
+        config1.retirer(gbRTX4060); // src.Composant introuvable: [GPU] Gigabyte RTX 4060
+        config2.retirer(ryzen5700x); // src.Composant introuvable: [CPU] AMD Ryzen 5 5700X
         commencerTest("Remplacement de composants");
         config2.remplacer(samsung980);  // [SSD] Western Digital SN850X 1TB retiré de la configuration (total=150,00$)
                                         // [SSD] Samsung 980 Pro 2TB ajouté à la configuration (total=400,00$)

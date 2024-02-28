@@ -1,4 +1,4 @@
-import java.util.Locale;
+package src;
 
 public class Configuration {
     private String description;
@@ -108,7 +108,7 @@ public class Configuration {
                     return true;
                 }
             }
-            System.out.println("Composant introuvable: " + composant.toString());
+            System.out.println("src.Composant introuvable: " + composant.toString());
            return false;
     }
 

@@ -1,4 +1,4 @@
-import java.util.Locale;
+package src;
 
 public class Composant {
     private final String categorie;
